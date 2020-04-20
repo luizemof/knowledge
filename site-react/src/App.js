@@ -1,19 +1,25 @@
 import React from 'react';
+import { connect } from 'react-redux'
 import './App.css';
 import Header from './components/templates/header/Header'
 import Menu from './components/templates/menu/Menu'
 import Content from './components/templates/content/Content'
 import Footer from './components/templates/footer/Footer'
 
-function App() {
+function App(props) {
+  const menu = props.menuToggle ? null : <Menu />
   return (
-    <div className="App">
+    <div className={`App${props.menuToggle ? " hide-menu" : ""}`}>
       <Header />
-      <Menu />
+      {menu}
       <Content />
       <Footer />
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = state => {
+  return { ...state.menuToggle }
+}
+
+export default connect(mapStateToProps)(App);

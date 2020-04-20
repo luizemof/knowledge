@@ -16,3 +16,10 @@ body {
     "menu content"
     "menu footer";
 }
+
+.App.hide-menu {
+  grid-template-areas:
+    "header header"
+    "content content"
+    "footer footer";
+}
