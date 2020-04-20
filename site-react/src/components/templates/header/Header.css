@@ -1,0 +1,36 @@
+.header {
+    grid-area: header;
+    background: linear-gradient(to right, #1e469a, #49a7c1);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.toggle {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFF;
+}
+
+.toggle:hover {
+    cursor: pointer;
+    background-color: #0002;
+}
+
+.title {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1.2em;
+    font-weight: 100;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.title a {
+    text-decoration: none;
+    color: #FFF;
+}
