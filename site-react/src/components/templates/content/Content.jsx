@@ -3,6 +3,5 @@ import './Content.css'
 
 export default props => (
     <div className="content">
-        Content
     </div>
 )

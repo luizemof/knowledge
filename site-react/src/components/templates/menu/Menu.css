@@ -1,4 +1,4 @@
 .menu {
     grid-area: menu;
-    background-color: blue;
+    background: linear-gradient(to right, #232426, #414345)
 }

@@ -3,6 +3,8 @@ import './Footer.css'
 
 export default props => (
     <div className="footer">
-        Footer
+        <span>
+            Copyright <strong>Cod3r</strong> 2015-2020
+        </span>
     </div>
 )
