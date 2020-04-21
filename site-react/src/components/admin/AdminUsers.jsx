@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { userUrl } from '../../global'
+import axios from 'axios'
 
 const initialState = {
     user: {}
@@ -17,17 +19,31 @@ export default class AdminUsers extends Component {
         this.setState({ user })
     }
 
+    preventDefaultAndStopPropagation(e) {
+        if (e) {
+            e.preventDefault()
+            e.stopPropagation()
+        }
+    }
+
     handleSubmit(e) {
-        e.preventDefault()
-        e.stopPropagation()
-        console.log(this.state.user)
+        this.preventDefaultAndStopPropagation(e)
+
+        const method = this.state.user.id ? "put" : "post";
+        const id = this.state.user.id ? `${this.state.user.id}` : ``;
+        axios[method](`${userUrl}/${id}`, this.state.user)
+            .then(() => {
+                this.handleReset()
+                alert('well done')
+            })
+            .catch(err => console.log(err))
     }
 
     handleReset(e) {
-        e.preventDefault()
-        e.stopPropagation()
+        this.preventDefaultAndStopPropagation(e)
         this.setState(initialState)
     }
+
 
     render() {
         return (
@@ -51,7 +67,7 @@ export default class AdminUsers extends Component {
                                 id="email"
                                 className="form-control"
                                 placeholder="Informe o Email do Usuário..."
-                                type="email"
+                                type="text"
                                 value={this.state.user.email || ''}
                                 onChange={e => this.handleInputChange(e)} />
                         </div>
