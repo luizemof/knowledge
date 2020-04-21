@@ -10,6 +10,10 @@
     padding-top: 12px;
 }
 
+.tab-content {
+    padding: 20px;
+}
+
 .tab-button {
     background-color: inherit;
     color: #007bff;
