@@ -1,0 +1,20 @@
+.tab {
+    background-color: #FFF;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+    height: 100%;
+}
+
+.tab-header {
+    background-color: rgba(0, 0, 0, 0.03);
+    padding-top: 12px;
+}
+
+.tab-button {
+    background-color: inherit;
+    color: #007bff;
+}
+
+.tab-button:focus {
+    outline: none;
+}
