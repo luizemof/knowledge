@@ -2,12 +2,27 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import { handleInputChange, preventDefaultAndStopPropagation } from '../utils'
 import { categoryUrl } from '../../global'
+import Table from '../templates/table/Table'
+
+const headers = [{
+    key: 'id',
+    label: 'Código'
+}, {
+    key: 'name',
+    label: 'Nome'
+}, {
+    key: 'path',
+    label: 'Caminho'
+}, {
+    key: 'actions',
+    label: 'Ações'
+}]
 
 export default class AdminCategories extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            categories: [], 
+            categories: [],
             category: {
                 id: 2,
                 name: 'Categoria 1'
@@ -31,6 +46,8 @@ export default class AdminCategories extends Component {
         return (
             <div>
                 {this.renderForm()}
+                <hr />
+                {this.renderTable()}
             </div>
         )
     }
@@ -59,13 +76,35 @@ export default class AdminCategories extends Component {
                         value={this.state.category.parentId || ''}
                         onChange={e => handleInputChange(e, this.state.category, (category) => this.setState({ category }))}
                     >
-                        {categories.map(category => <option key={`cat_opt_${category.id}`} value={category.id}>{category.name}</option>)}
+                        {categories.map(category => <option key={`cat_opt_${category.id}`} value={category.id}>{category.path}</option>)}
                     </select>
                 </div>
                 <button className="btn btn-primary" type="submit">Salvar</button>
                 <button className="btn btn-secondary ml-2" type="reset">Cancelar</button>
             </form>
         )
+    }
+
+    renderTable() {
+        const tableDatas = this.state.categories.map(category => {
+            return (
+                <Table.Data key={`TABLE_DATA_${category.id}`} data={category}>
+                    <div cell-template="actions">
+                        <button className="btn btn-warning mr-2" onClick={() => this.handleTableDataAction(category)}>
+                            <i className="fa fa-pencil"></i>
+                        </button>
+                        <button className="btn btn-danger" onClick={e => this.handleTableDataAction(category, true)}>
+                            <i className="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </Table.Data>
+            )
+        })
+
+        return (
+            <Table headers={headers} data={this.state.categories}>
+                {tableDatas}
+            </Table>)
     }
 
     handleSubmit(e) {
@@ -76,5 +115,9 @@ export default class AdminCategories extends Component {
     handleReset(e) {
         preventDefaultAndStopPropagation(e)
         this.setState({ category: {} })
+    }
+
+    handleTableDataAction(category, isRemoving = false) {
+        this.setState({ category, isRemoving })
     }
 }
