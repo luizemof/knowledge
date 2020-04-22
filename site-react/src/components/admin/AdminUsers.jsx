@@ -1,10 +1,29 @@
 import React, { Component } from 'react'
 import { userUrl } from '../../global'
 import axios from 'axios'
+import Table from '../templates/table/Table'
 
 const initialState = {
     user: {}
 }
+
+const headers = [{
+    key: 'id',
+    label: 'Código'
+}, {
+    key: 'name',
+    label: 'Nome'
+}, {
+    key: 'email',
+    label: 'Email'
+}, {
+    key: 'admin',
+    label: 'Administrador',
+    formatter: (data) => data ? 'Sim' : 'Não'
+}, {
+    key: 'actions',
+    label: 'Ações'
+}]
 
 export default class AdminUsers extends Component {
 
@@ -111,6 +130,7 @@ export default class AdminUsers extends Component {
                     <button type="reset" className="btn btn-secondary ml-2">Cancelar</button>
                 </form>
                 <hr />
+                <Table headers={headers}></Table>
             </div>
         )
     }
