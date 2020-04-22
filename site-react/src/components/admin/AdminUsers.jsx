@@ -5,7 +5,8 @@ import Table from '../templates/table/Table'
 
 const initialState = {
     user: {},
-    users: []
+    users: [],
+    isRemoving: false
 }
 
 const headers = [{
@@ -34,6 +35,10 @@ export default class AdminUsers extends Component {
     }
 
     componentDidMount() {
+        this.loadUsers()
+    }
+    
+    loadUsers() {
         axios.get(userUrl).then(res => {
             this.setState({ users: res.data })
         })
@@ -60,14 +65,18 @@ export default class AdminUsers extends Component {
         axios[method](`${userUrl}/${id}`, this.state.user)
             .then(() => {
                 this.handleReset()
-                alert('well done')
+                this.loadUsers()
             })
             .catch(err => console.log(err))
     }
 
     handleReset(e) {
         this.preventDefaultAndStopPropagation(e)
-        this.setState(initialState)
+        this.setState({ user: {} })
+    }
+
+    handleTableDataAction(user, isRemoving = false) {
+        this.setState({ user, isRemoving })
     }
 
     renderForm() {
@@ -137,12 +146,12 @@ export default class AdminUsers extends Component {
         )
     }
 
-    render() {
+    renderTable() {
         const tableDatas = this.state.users.map(user => {
             return (
                 <Table.Data key={`TABLE_DATA_${user.id}`} data={user}>
                     <div cell-template="actions">
-                        <button className="btn btn-warning" onClick={e => console.log(user.id)}>
+                        <button className="btn btn-warning" onClick={() => this.handleTableDataAction(user)}>
                             <i className="fa fa-pencil"></i>
                         </button>
                         <button className="btn btn-danger ml-2" onClick={e => console.log(user.id)}>
@@ -154,12 +163,17 @@ export default class AdminUsers extends Component {
         })
 
         return (
+            <Table headers={headers} data={this.state.users}>
+                {tableDatas}
+            </Table>)
+    }
+
+    render() {
+        return (
             <div>
                 {this.renderForm()}
                 <hr />
-                <Table headers={headers} data={this.state.users}>
-                    {tableDatas}
-                </Table>
+                {this.renderTable()}
             </div>
         )
     }
