@@ -37,7 +37,7 @@ export default class AdminUsers extends Component {
     componentDidMount() {
         this.loadUsers()
     }
-    
+
     loadUsers() {
         axios.get(userUrl).then(res => {
             this.setState({ users: res.data })
@@ -72,14 +72,30 @@ export default class AdminUsers extends Component {
 
     handleReset(e) {
         this.preventDefaultAndStopPropagation(e)
-        this.setState({ user: {} })
+        this.setState({ user: {}, isRemoving: false })
     }
 
     handleTableDataAction(user, isRemoving = false) {
         this.setState({ user, isRemoving })
     }
 
+    handleRemove(e) {
+        this.preventDefaultAndStopPropagation(e)
+        const { user } = this.state
+        if (user) {
+            axios
+                .delete(`${userUrl}/${user.id}`)
+                .then(() => {
+                    this.handleReset()
+                    this.loadUsers()
+                })
+                .catch(err => console.log(err))
+        }
+    }
+
     renderForm() {
+        const saveButton = !this.state.isRemoving ? <button type="submit" className="btn btn-primary">Salvar</button> : null
+        const removeButton = this.state.isRemoving ? <button className="btn btn-danger" onClick={e => this.handleRemove(e)}>Excluir</button> : null
         return (
             <form onSubmit={e => this.handleSubmit(e)} onReset={e => this.handleReset(e)}>
                 <div className="form-row">
@@ -90,6 +106,7 @@ export default class AdminUsers extends Component {
                             className="form-control"
                             placeholder="Informe o Nome do Usuário..."
                             type="text"
+                            readOnly={this.state.isRemoving}
                             value={this.state.user.name || ''}
                             onChange={e => this.handleInputChange(e)} />
                     </div>
@@ -101,6 +118,7 @@ export default class AdminUsers extends Component {
                             className="form-control"
                             placeholder="Informe o Email do Usuário..."
                             type="text"
+                            readOnly={this.state.isRemoving}
                             value={this.state.user.email || ''}
                             onChange={e => this.handleInputChange(e)} />
                     </div>
@@ -112,6 +130,7 @@ export default class AdminUsers extends Component {
                                 id="admin"
                                 className="form-check-input"
                                 type="checkbox"
+                                disabled={this.state.isRemoving}
                                 checked={this.state.user.admin || false}
                                 onChange={e => this.handleInputChange(e)} />
                             <label className="form-check-label" htmlFor="admin">Administrador?</label>
@@ -126,7 +145,9 @@ export default class AdminUsers extends Component {
                             id="password"
                             className="form-control"
                             placeholder="Informe a Senha do Usuário..."
-                            type="password" value={this.state.user.password || ''}
+                            type="password"
+                            value={this.state.user.password || ''}
+                            readOnly={this.state.isRemoving}
                             onChange={e => this.handleInputChange(e)} />
                     </div>
                     <div className="form-group col-6">
@@ -136,11 +157,13 @@ export default class AdminUsers extends Component {
                             className="form-control"
                             placeholder="Confirme a Senha do Usuário"
                             type="password"
+                            readOnly={this.state.isRemoving}
                             value={this.state.user.passwordConfirm || ''}
                             onChange={e => this.handleInputChange(e)} />
                     </div>
                 </div>
-                <button type="submit" className="btn btn-primary">Salvar</button>
+                {saveButton}
+                {removeButton}
                 <button type="reset" className="btn btn-secondary ml-2">Cancelar</button>
             </form>
         )
@@ -151,10 +174,10 @@ export default class AdminUsers extends Component {
             return (
                 <Table.Data key={`TABLE_DATA_${user.id}`} data={user}>
                     <div cell-template="actions">
-                        <button className="btn btn-warning" onClick={() => this.handleTableDataAction(user)}>
+                        <button className="btn btn-warning mr-2" onClick={() => this.handleTableDataAction(user)}>
                             <i className="fa fa-pencil"></i>
                         </button>
-                        <button className="btn btn-danger ml-2" onClick={e => console.log(user.id)}>
+                        <button className="btn btn-danger" onClick={e => this.handleTableDataAction(user, true)}>
                             <i className="fa fa-trash"></i>
                         </button>
                     </div>
