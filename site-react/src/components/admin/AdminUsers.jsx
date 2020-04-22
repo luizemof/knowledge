@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { userUrl } from '../../global'
 import axios from 'axios'
 import Table from '../templates/table/Table'
+import { preventDefaultAndStopPropagation } from '../utils'
 
 const initialState = {
     user: {},
@@ -50,15 +51,8 @@ export default class AdminUsers extends Component {
         this.setState({ user })
     }
 
-    preventDefaultAndStopPropagation(e) {
-        if (e) {
-            e.preventDefault()
-            e.stopPropagation()
-        }
-    }
-
     handleSubmit(e) {
-        this.preventDefaultAndStopPropagation(e)
+        preventDefaultAndStopPropagation(e)
 
         const method = this.state.user.id ? "put" : "post";
         const id = this.state.user.id ? `${this.state.user.id}` : ``;
@@ -71,7 +65,7 @@ export default class AdminUsers extends Component {
     }
 
     handleReset(e) {
-        this.preventDefaultAndStopPropagation(e)
+        preventDefaultAndStopPropagation(e)
         this.setState({ user: {}, isRemoving: false })
     }
 
@@ -80,7 +74,7 @@ export default class AdminUsers extends Component {
     }
 
     handleRemove(e) {
-        this.preventDefaultAndStopPropagation(e)
+        preventDefaultAndStopPropagation(e)
         const { user } = this.state
         if (user) {
             axios
