@@ -23,10 +23,8 @@ export default class AdminCategories extends Component {
         super(props)
         this.state = {
             categories: [],
-            category: {
-                id: 2,
-                name: 'Categoria 1'
-            }
+            category: {},
+            isRemoving: false
         }
     }
 
@@ -55,6 +53,8 @@ export default class AdminCategories extends Component {
     renderForm() {
         const defaultCategoryOpt = (<option value=''></option>)
         const categories = [defaultCategoryOpt, ...this.state.categories]
+        const saveButton = !this.state.isRemoving ? <button className="btn btn-primary" type="submit">Salvar</button> : null
+        const removeButton = this.state.isRemoving ? <button className="btn btn-danger" type="button" onClick={e => this.handleRemove(e)}>Excluir</button> : null
         return (
             <form onSubmit={e => this.handleSubmit(e)} onReset={e => this.handleReset(e)}>
                 <div className="form-group">
@@ -64,6 +64,7 @@ export default class AdminCategories extends Component {
                         id="name"
                         type="text"
                         placeholder="Informe o Nome da Categoria..."
+                        readOnly={this.state.isRemoving}
                         value={this.state.category.name || ''}
                         onChange={e => handleInputChange(e, this.state.category, (category) => this.setState({ category }))} />
                 </div>
@@ -73,13 +74,15 @@ export default class AdminCategories extends Component {
                     <select
                         id="parentId"
                         className="form-control"
+                        disabled={this.state.isRemoving}
                         value={this.state.category.parentId || ''}
                         onChange={e => handleInputChange(e, this.state.category, (category) => this.setState({ category }))}
                     >
                         {categories.map(category => <option key={`cat_opt_${category.id}`} value={category.id}>{category.path}</option>)}
                     </select>
                 </div>
-                <button className="btn btn-primary" type="submit">Salvar</button>
+                {saveButton}
+                {removeButton}
                 <button className="btn btn-secondary ml-2" type="reset">Cancelar</button>
             </form>
         )
@@ -90,10 +93,10 @@ export default class AdminCategories extends Component {
             return (
                 <Table.Data key={`TABLE_DATA_${category.id}`} data={category}>
                     <div cell-template="actions">
-                        <button className="btn btn-warning mr-2" onClick={() => this.handleTableDataAction(category)}>
+                        <button className="btn btn-warning mr-2" onClick={() => this.handleTableDataAction({ ...category })}>
                             <i className="fa fa-pencil"></i>
                         </button>
-                        <button className="btn btn-danger" onClick={e => this.handleTableDataAction(category, true)}>
+                        <button className="btn btn-danger" onClick={() => this.handleTableDataAction({ ...category }, true)}>
                             <i className="fa fa-trash"></i>
                         </button>
                     </div>
@@ -109,15 +112,34 @@ export default class AdminCategories extends Component {
 
     handleSubmit(e) {
         preventDefaultAndStopPropagation(e)
-        console.log(this.state.category)
+        const method = this.state.category.id ? 'put' : 'post'
+        const id = this.state.category.id ? `${this.state.category.id}` : ''
+
+        axios[method](`${categoryUrl}/${id}`, this.state.category)
+            .then(() => {
+                this.handleReset()
+                this.loadCategories()
+            })
+            .catch(err => console.log(err))
     }
 
     handleReset(e) {
         preventDefaultAndStopPropagation(e)
-        this.setState({ category: {} })
+        this.setState({ category: {}, isRemoving: false })
     }
 
     handleTableDataAction(category, isRemoving = false) {
         this.setState({ category, isRemoving })
+    }
+
+    handleRemove(e) {
+        preventDefaultAndStopPropagation(e)
+        axios
+            .delete(`${categoryUrl}/${this.state.category.id}`)
+            .then(() => {
+                this.handleReset()
+                this.loadCategories()
+            })
+            .catch(err => console.log(err))
     }
 }
