@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import CKEditor from 'ckeditor4-react';
 import Table from '../templates/table/Table'
 
 import { categoryUrl, userUrl, articleUrl } from '../../global'
@@ -127,6 +128,11 @@ export default class AdminArticles extends Component {
                         {this.renderUserOptions()}
                     </select>
                 </div>
+
+                <div className="mb-3">
+                    <CKEditor data={this.state.article.content} onChange={e => this.handleCKEditorChange(e)} />
+                </div>
+
                 <button type="submit" className="btn btn-primary">Salvar</button>
                 <button type="reset" className="btn btn-secondary ml-2">Cancelar</button>
             </form>
@@ -174,5 +180,11 @@ export default class AdminArticles extends Component {
     handleSubmit(e) {
         preventDefaultAndStopPropagation(e)
         console.log(this.state.article)
+    }
+
+    handleCKEditorChange(e) {
+        const article = { ...this.state.article }
+        article.content = e.editor.getData()
+        this.setState({ article })
     }
 }
