@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import CKEditor from 'ckeditor4-react';
 import Table from '../templates/table/Table'
+import Pagination from '../templates/pagination/Pagination'
 
 import { categoryUrl, userUrl, articleUrl } from '../../global'
 import { preventDefaultAndStopPropagation, handleInputChange } from '../utils'
@@ -25,6 +26,9 @@ export default class AdminArticles extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            currentPage: 1,
+            limit: null,
+            count: 0,
             article: {},
             articles: [],
             categories: [],
@@ -55,7 +59,7 @@ export default class AdminArticles extends Component {
     loadArticles() {
         axios
             .get(articleUrl)
-            .then(res => this.setState({ articles: res.data.data }))
+            .then(res => this.setState({ articles: res.data.data, limit: res.data.limit, count: res.data.count }))
             .catch(err => console.log(err))
     }
 
@@ -164,9 +168,13 @@ export default class AdminArticles extends Component {
         })
 
         return (
-            <Table headers={headers} data={this.state.categories}>
-                {tableDatas}
-            </Table>)
+            <div>
+                <Table headers={headers} data={this.state.categories}>
+                    {tableDatas}
+                </Table>
+                <Pagination totalItems={this.state.count} currentPage={this.state.currentPage} limit={this.state.limit} />
+            </div>
+        )
     }
 
     renderCategoriesOptions() {
@@ -205,7 +213,7 @@ export default class AdminArticles extends Component {
     handleRemove(e) {
         preventDefaultAndStopPropagation(e)
         axios.delete(`${articleUrl}/${this.state.article.id}`)
-            .then(() => { 
+            .then(() => {
                 this.handleReset()
                 this.loadArticles()
             })
