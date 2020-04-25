@@ -10,7 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 import axios from 'axios'
 
-axios.defaults.headers.common['Authorization'] = 'bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwibmFtZSI6Ikx1aXogRWR1YXJkbyBNb3VyYSIsImVtYWlsIjoibHVpei5lbW9mQGdtYWlsLmNvbSIsImFkbWluIjp0cnVlLCJpYXQiOjE1ODc1MDgxOTEsImV4cCI6MTU4Nzc2NzM5MX0.0Tv72seP_DQ4X4LjSkpwQn1WxWSOhz0F4FmG8wp1Aek'
+axios.defaults.headers.common['Authorization'] = 'bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwibmFtZSI6Ikx1aXogRWR1YXJkbyBNb3VyYSIsImVtYWlsIjoibHVpei5lbW9mQGdtYWlsLmNvbSIsImFkbWluIjp0cnVlLCJpYXQiOjE1ODc4MzM5NDUsImV4cCI6MTU4ODA5MzE0NX0.GFXlo1gg3-Zo7uRAwOypFwuEmTp55ugw_MZ4-rrofJk'
 
 ReactDOM.render(
   <Provider store={store}>

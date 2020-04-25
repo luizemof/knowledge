@@ -70,8 +70,10 @@ export default class AdminArticles extends Component {
     }
 
     renderForm() {
+        const saveButton = !this.state.isRemoving ? <button type="submit" className="btn btn-primary">Salvar</button> : null
+        const removeButton = this.state.isRemoving ? <button type="button" className="btn btn-danger" onClick={e => this.handleRemove(e)}>Excluir</button> : null
         return (
-            <form onSubmit={e => this.handleSubmit(e)}>
+            <form onSubmit={e => this.handleSubmit(e)} onReset={e => this.handleReset(e)}>
                 <div className="form-group">
                     <label htmlFor="name">Nome:</label>
                     <input
@@ -79,6 +81,7 @@ export default class AdminArticles extends Component {
                         className="form-control"
                         type="text"
                         placeholder="Informe o Nome do Artigo..."
+                        readOnly={this.state.isRemoving}
                         value={this.state.article.name || ''}
                         onChange={e => handleInputChange(e, { ...this.state.article }, article => this.setState({ article }))} />
                 </div>
@@ -90,6 +93,7 @@ export default class AdminArticles extends Component {
                         type="text"
                         className="form-control"
                         placeholder="Informe a Descrição do Artigo..."
+                        readOnly={this.state.isRemoving}
                         value={this.state.article.description || ''}
                         onChange={e => handleInputChange(e, { ...this.state.article }, article => this.setState({ article }))} />
                 </div>
@@ -101,6 +105,7 @@ export default class AdminArticles extends Component {
                         className="form-control"
                         type="text"
                         placeholder="Informe a URL da Imagem do Artigo..."
+                        readOnly={this.state.isRemoving}
                         value={this.state.article.imageUrl || ''}
                         onChange={e => handleInputChange(e, { ...this.state.article }, article => this.setState({ article }))} />
                 </div>
@@ -110,6 +115,7 @@ export default class AdminArticles extends Component {
                     <select
                         id="categoryId"
                         className="form-control"
+                        disabled={this.state.isRemoving}
                         value={this.state.article.categoryId || ''}
                         onChange={e => handleInputChange(e, { ...this.state.article }, article => this.setState({ article }))}
                     >
@@ -122,6 +128,7 @@ export default class AdminArticles extends Component {
                     <select
                         id="userId"
                         className="form-control"
+                        disabled={this.state.isRemoving}
                         value={this.state.article.userId || ''}
                         onChange={e => handleInputChange(e, { ...this.state.article }, article => this.setState({ article }))}
                     >
@@ -130,10 +137,11 @@ export default class AdminArticles extends Component {
                 </div>
 
                 <div className="mb-3">
-                    <CKEditor data={this.state.article.content} onChange={e => this.handleCKEditorChange(e)} />
+                    <CKEditor readOnly={this.state.isRemoving} data={this.state.article.content} onChange={e => this.handleCKEditorChange(e)} />
                 </div>
 
-                <button type="submit" className="btn btn-primary">Salvar</button>
+                {saveButton}
+                {removeButton}
                 <button type="reset" className="btn btn-secondary ml-2">Cancelar</button>
             </form>
         )
@@ -179,12 +187,43 @@ export default class AdminArticles extends Component {
 
     handleSubmit(e) {
         preventDefaultAndStopPropagation(e)
-        console.log(this.state.article)
+        const method = this.state.article.id ? 'put' : 'post'
+        const id = this.state.article.id ? `${this.state.article.id}` : ''
+
+        axios[method](`${articleUrl}/${id}`, this.state.article)
+            .then(() => {
+                this.handleReset()
+                this.loadArticles()
+            }).catch(err => console.log(err))
+    }
+
+    handleReset(e) {
+        preventDefaultAndStopPropagation(e)
+        this.setState({ article: {}, isRemoving: false })
+    }
+
+    handleRemove(e) {
+        preventDefaultAndStopPropagation(e)
+        axios.delete(`${articleUrl}/${this.state.article.id}`)
+            .then(() => { 
+                this.handleReset()
+                this.loadArticles()
+            })
+            .catch(err => console.log(err))
     }
 
     handleCKEditorChange(e) {
         const article = { ...this.state.article }
         article.content = e.editor.getData()
         this.setState({ article })
+    }
+
+    handleTableDataAction(article, isRemoving = false) {
+        axios
+            .get(`${articleUrl}/${article.id}`)
+            .then(res => {
+                this.setState({ article: res.data, isRemoving })
+            })
+            .catch(err => console.log(err))
     }
 }
