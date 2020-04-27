@@ -56,9 +56,9 @@ export default class AdminArticles extends Component {
             .catch(err => console.log(err))
     }
 
-    loadArticles() {
+    loadArticles(currentPage) {
         axios
-            .get(articleUrl)
+            .get(`${articleUrl}?page=${currentPage || 1}`)
             .then(res => this.setState({ articles: res.data.data, limit: res.data.limit, count: res.data.count }))
             .catch(err => console.log(err))
     }
@@ -172,7 +172,12 @@ export default class AdminArticles extends Component {
                 <Table headers={headers} data={this.state.categories}>
                     {tableDatas}
                 </Table>
-                <Pagination totalItems={this.state.count} currentPage={this.state.currentPage} limit={this.state.limit} />
+                <Pagination
+                    totalItems={this.state.count}
+                    currentPage={this.state.currentPage}
+                    limit={this.state.limit}
+                    onPaginationChange={e => this.handlePaginationChange(e.nextPage)}
+                />
             </div>
         )
     }
@@ -233,5 +238,10 @@ export default class AdminArticles extends Component {
                 this.setState({ article: res.data, isRemoving })
             })
             .catch(err => console.log(err))
+    }
+
+    handlePaginationChange(nextPage) {
+        this.setState({ currentPage: nextPage })
+        this.loadArticles(nextPage)
     }
 }
