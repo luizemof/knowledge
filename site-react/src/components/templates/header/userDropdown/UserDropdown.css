@@ -13,6 +13,10 @@
     height: 100%;
 }
 
+.user-dropdown-button:hover {
+    cursor: pointer;
+}
+
 .user-dropdown-img {
     margin: 0px 10px;
 }

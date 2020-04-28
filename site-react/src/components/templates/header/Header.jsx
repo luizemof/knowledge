@@ -4,6 +4,7 @@ import { menuToggle } from '../../../redux/actions'
 import UserDropdown from './userDropdown/UserDropdown'
 
 import './Header.css'
+import { Link } from 'react-router-dom'
 
 class Header extends Component {
 
@@ -19,7 +20,7 @@ class Header extends Component {
                     <i className={this.state.menuToggle ? "fa fa-lg fa-angle-left" : "fa fa-lg fa-angle-down"} />
                 </div>
                 <h1 className="title">
-                    <a href="/">Cod3r - Base de Conhecimento</a>
+                    <Link to="/">Cod3r - Base de Conhecimento</Link>
                 </h1>
                 <UserDropdown />
             </header>

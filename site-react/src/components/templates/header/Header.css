@@ -30,7 +30,7 @@
     text-align: center;
 }
 
-.title a {
+.title a, .title a:hover {
     text-decoration: none;
     color: #FFF;
 }

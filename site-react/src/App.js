@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import './App.css';
 import Header from './components/templates/header/Header'
@@ -9,12 +10,14 @@ import Footer from './components/templates/footer/Footer'
 function App(props) {
   const menu = props.menuToggle ? null : <Menu />
   return (
-    <div className={`App${props.menuToggle ? " hide-menu" : ""}`}>
-      <Header />
-      {menu}
-      <Content />
-      <Footer />
-    </div>
+    <BrowserRouter>
+      <div className={`App${props.menuToggle ? " hide-menu" : ""}`}>
+        <Header />
+        {menu}
+        <Content />
+        <Footer />
+      </div>
+    </BrowserRouter>
   );
 }
 

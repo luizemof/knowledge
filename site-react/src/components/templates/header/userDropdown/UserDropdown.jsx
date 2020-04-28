@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Gravatar from 'react-gravatar'
 import './UserDropdown.css'
+import { Link } from 'react-router-dom'
 
 export default class UserDropdown extends Component {
     render() {
@@ -13,9 +14,9 @@ export default class UserDropdown extends Component {
                 <i className="fa fa-angle-down"></i>
             </div>
             <div className="user-dropdown-content">
-                <a href="/admin">
+                <Link to="/admin">
                     <i className="fa fa-cogs">Administração</i>
-                </a>
+                </Link>
                 <button onClick={e => this.logout(e)}>
                     <i className="fa fa-sign-out">Sair</i>
                 </button>
