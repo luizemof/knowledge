@@ -6,7 +6,7 @@ import './ArticlesItem.css'
 
 function ArticlesItem({ item, history }) {
     return (
-        <div className="article-item" onClick={e => console.log(history)}>
+        <div className="article-item" onClick={e => history.push(`/article/${item.id}`)}>
             <div className="article-item-img">
                 <img src={item.imageUrl || ArticleImg} width="150" height="150" alt="Article"></img>
             </div>
