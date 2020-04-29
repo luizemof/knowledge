@@ -1,0 +1,40 @@
+.article-item {
+    display: flex;
+    background-color: #FFF;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.article-item:hover{
+    cursor: pointer;
+}
+
+.article-item-img {
+    padding-right: 20px;
+    margin-right: 20px;
+    border-right: 1px solid #aaa;
+}
+
+.article-item-img img {
+    border-radius: 8px;
+}
+
+.article-item-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.article-item-info h1 {
+    font-size: 1.7rem;
+}
+
+.article-item-info p {
+    color: #555;
+    flex: 1;
+    font-size: 1.1rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
