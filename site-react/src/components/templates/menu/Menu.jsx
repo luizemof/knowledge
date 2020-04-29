@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { createBrowserHistory } from "history"
+import { withRouter } from 'react-router-dom'
 
 import TreeView from '../TreeView/TreeView'
 import { categoryUrl } from '../../../global'
 
 import './Menu.css'
 
-const history = createBrowserHistory()
-export default class Menu extends Component {
+class Menu extends Component {
     constructor(props) {
         super(props)
         this.state = { tree: [] }
@@ -32,7 +31,11 @@ export default class Menu extends Component {
     }
 
     handleNodeSelected(node) {
-        // axios.get('http')
-        history.push('/admin')
+        this.props.history.push({
+            pathname: `/categories/${node.id}/articles`,
+            state: { item: node }
+        })
     }
 }
+
+export default withRouter(Menu)
