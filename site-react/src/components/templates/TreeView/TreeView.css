@@ -1,0 +1,52 @@
+.tree-root {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0px;
+}
+
+.tree-node {
+    list-style: none;
+}
+
+.tree-node-children {
+    padding-left: 20px;
+}
+
+.tree-node-children.has-children {
+    padding-left: 30px;
+}
+
+.tree-content {
+    display: flex;
+    align-items: center;
+}
+
+.tree-content:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.tree-arrow {
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tree-arrow-icon {
+    border: 1.5px solid;
+    border-left: 0;
+    border-top: 0;
+    height: 9px;
+    width: 9px;
+    transform: rotate(-45deg);
+    transition: .25s;
+    transform-origin: center;
+}
+
+.tree-arrow-icon.expanded {
+    transform: rotate(45deg) translateY(-5px);
+    transition: .25s;
+    transform-origin: center;
+}

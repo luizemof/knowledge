@@ -1,6 +1,7 @@
 .menu {
     grid-area: menu;
     background: linear-gradient(to right, #232426, #414345);
+    color: #aaa;
 }
 
 .menu-search {
