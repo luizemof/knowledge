@@ -1,0 +1,25 @@
+.auth-new-user {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.auth-new-user > span{
+    align-self: center;
+    font-size: 1.2rem;
+    font-weight: 100;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.auth-new-user-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-new-user-content > input {
+    margin-bottom: 10px;
+}
+.auth-new-user-content > button {
+    align-self: flex-end;   
+}
