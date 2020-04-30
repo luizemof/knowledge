@@ -7,6 +7,7 @@ body {
 }
 
 .App {
+  background-color: #efefef;
   height: 100vh;
   display: grid;
   grid-template-rows: 60px 1fr 40px;
@@ -21,5 +22,12 @@ body {
   grid-template-areas:
     "header header"
     "content content"
+    "footer footer";
+}
+
+.App.app-auth {
+  grid-template-areas: 
+    "header header"
+    "auth auth"
     "footer footer";
 }

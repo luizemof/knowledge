@@ -12,6 +12,7 @@ class Menu extends Component {
         super(props)
         this.state = { tree: [] }
     }
+    
     componentDidMount() {
         axios
             .get(`${categoryUrl}/tree`)

@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import { TOGGLE_MENU } from '../actionsType'
+import { TOGGLE_MENU, USER_LOGGED } from '../actionsType'
 
 const menuToggle = function (state = { menuToggle: false }, action) {
     switch (action.type) {
@@ -8,10 +8,21 @@ const menuToggle = function (state = { menuToggle: false }, action) {
                 ...state,
                 menuToggle: action.payload.menuToggle
             }
-
         default:
             return { ...state }
     }
 }
 
-export default combineReducers({ menuToggle })
+const userLogged = function (state = { user: null }, action) {
+    switch (action.type) {
+        case USER_LOGGED:
+            return {
+                ...state,
+                user: { ...action.payload.user }
+            }
+        default:
+            return { ...state }
+    }
+}
+
+export default combineReducers({ menuToggle, userLogged })

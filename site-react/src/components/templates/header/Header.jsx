@@ -16,14 +16,20 @@ class Header extends Component {
     render() {
         return (
             <header className="header">
-                <div className="toggle" onClick={e => this.handleToggleClick()}>
-                    <i className={this.state.menuToggle ? "fa fa-lg fa-angle-left" : "fa fa-lg fa-angle-down"} />
-                </div>
+                {!this.props.hideButtons ? this.renderToogle() : null}
                 <h1 className="title">
                     <Link to="/">Cod3r - Base de Conhecimento</Link>
                 </h1>
-                <UserDropdown />
+                {!this.props.hideButtons ? <UserDropdown /> : null}
             </header>
+        )
+    }
+
+    renderToogle() {
+        return (
+            <div className="toggle" onClick={e => this.handleToggleClick()}>
+                <i className={this.state.menuToggle ? "fa fa-lg fa-angle-left" : "fa fa-lg fa-angle-down"} />
+            </div>
         )
     }
 
