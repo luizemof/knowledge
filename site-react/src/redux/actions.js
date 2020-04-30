@@ -1,4 +1,4 @@
-import { TOGGLE_MENU } from './actionsType'
+import { TOGGLE_MENU, USER_LOGGED } from './actionsType'
 
 export function menuToggle(menuToggle) {
     return {
@@ -6,5 +6,12 @@ export function menuToggle(menuToggle) {
         payload: {
             menuToggle
         }
+    }
+}
+
+export function setUser(user) {
+    return {
+        type: USER_LOGGED,
+        payload: { user }
     }
 }
