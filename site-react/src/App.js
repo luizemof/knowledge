@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import './App.css';
+import axios from 'axios';
+
 import Header from './components/templates/header/Header'
 import Menu from './components/templates/menu/Menu'
 import Content from './components/templates/content/Content'
 import Footer from './components/templates/footer/Footer'
 import Auth from './components/auth/Auth';
-import { setUser } from './redux/actions';
-import axios from 'axios';
+
+import { user_key, baseUrl } from './global';
+
+import './App.css';
 
 function App(props) {
   const [hasValidToken, setHasValidToken] = useState(false)
@@ -17,7 +20,11 @@ function App(props) {
   const content = hasValidToken ? <Content /> : null
   const auth = !hasValidToken ? <Auth /> : null
 
-  validateToken(props).then(hasValidToken => setHasValidToken(hasValidToken))
+  validateToken(props)
+    .then(hasValidToken => {
+      setHasValidToken(hasValidToken)
+    })
+    .catch(() => { setHasValidToken(false) })
 
   return (
     <div className={`App${!hasMenu ? " hide-menu" : ""}${!hasValidToken ? " app-auth" : ""}`}>
@@ -30,13 +37,13 @@ function App(props) {
   );
 }
 
-async function validateToken({ user, setUser }) {
-  if (user.token) {
-    const isValid = (await axios.post('http://localhost:3000/validateToken', user)).data
-    return isValid
+async function validateToken(props) {
+  let user = props.user || { token: null }
+  if (!user.token) {
+    user = JSON.parse(localStorage.getItem(user_key))
   }
-
-  return false
+  const isValid = (await axios.post(`${baseUrl}/validateToken`, user)).data
+  return typeof isValid === 'boolean' && isValid
 }
 
 const mapStateToProps = state => {
