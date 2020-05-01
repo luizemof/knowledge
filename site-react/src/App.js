@@ -20,11 +20,16 @@ function App(props) {
   const content = hasValidToken ? <Content /> : null
   const auth = !hasValidToken ? <Auth /> : null
 
+  if (!axios.defaults.headers.common['Authorization'] && hasValidToken && props.user) {
+    axios.defaults.headers.common['Authorization'] = `bearer ${props.user.token}`
+  }
+
   validateToken(props)
     .then(hasValidToken => {
       setHasValidToken(hasValidToken)
     })
     .catch(() => { setHasValidToken(false) })
+    
   return (
     <div className={`App${!hasMenu ? " hide-menu" : ""}${!hasValidToken ? " app-auth" : ""}`}>
       <Header hideButtons={!hasValidToken} />
