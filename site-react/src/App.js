@@ -9,7 +9,7 @@ import Content from './components/templates/content/Content'
 import Footer from './components/templates/footer/Footer'
 import Auth from './components/auth/Auth';
 
-import { user_key, baseUrl } from './global';
+import { baseUrl } from './global';
 
 import './App.css';
 
@@ -25,7 +25,6 @@ function App(props) {
       setHasValidToken(hasValidToken)
     })
     .catch(() => { setHasValidToken(false) })
-
   return (
     <div className={`App${!hasMenu ? " hide-menu" : ""}${!hasValidToken ? " app-auth" : ""}`}>
       <Header hideButtons={!hasValidToken} />
@@ -37,11 +36,7 @@ function App(props) {
   );
 }
 
-async function validateToken(props) {
-  let user = props.user || { token: null }
-  if (!user.token) {
-    user = JSON.parse(localStorage.getItem(user_key))
-  }
+async function validateToken({ user }) {
   const isValid = (await axios.post(`${baseUrl}/validateToken`, user)).data
   return typeof isValid === 'boolean' && isValid
 }

@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import { TOGGLE_MENU, USER_LOGGED } from '../actionsType'
+import { user_key } from '../../global'
 
 const menuToggle = function (state = { menuToggle: false }, action) {
     switch (action.type) {
@@ -13,7 +14,7 @@ const menuToggle = function (state = { menuToggle: false }, action) {
     }
 }
 
-const userLogged = function (state = { user: null }, action) {
+const userLogged = function (state = { user: JSON.parse(localStorage.getItem(user_key)) }, action) {
     switch (action.type) {
         case USER_LOGGED:
             return {

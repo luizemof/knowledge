@@ -1,31 +1,33 @@
-import React, { Component } from 'react'
+import React from 'react'
 import Gravatar from 'react-gravatar'
 import './UserDropdown.css'
 import { Link } from 'react-router-dom'
 import { setUser } from '../../../../redux/actions'
 import { connect } from 'react-redux'
 
-class UserDropdown extends Component {
-    render() {
-        return (<div className="user-dropdown">
+function UserDropdown({ user, setUser }) {
+    const adminTemplate = (<Link to="/admin"><i className="fa fa-cogs">Administração</i></Link>)
+    return (
+        <div className="user-dropdown">
             <div className="user-dropdown-button">
-                <span className="name">Luiz</span>
+                <span className="name">{user ? user.name : ''}</span>
                 <div className="user-dropdown-img">
-                    <Gravatar email="luiz.emof@gmail.com" size={37} />
+                    <Gravatar email={user ? user.email : ''} size={37} />
                 </div>
                 <i className="fa fa-angle-down"></i>
             </div>
             <div className="user-dropdown-content">
-                <Link to="/admin">
-                    <i className="fa fa-cogs">Administração</i>
-                </Link>
-                <button onClick={e => this.props.setUser(null)}>
+                {user && user.admin ? adminTemplate : null}
+                <a href='/' onClick={e => { e.preventDefault(); setUser(null)}}>
                     <i className="fa fa-sign-out">Sair</i>
-                </button>
+                </a>
             </div>
         </div>
-        )
-    }
+    )
 }
 
-export default connect(null, { setUser })(UserDropdown)
+const mapStateToProps = state => {
+    return { user: state.userLogged.user }
+}
+
+export default connect(mapStateToProps, { setUser })(UserDropdown)

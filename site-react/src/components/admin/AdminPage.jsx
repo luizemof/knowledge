@@ -15,10 +15,6 @@ export default class AdminPage extends Component {
         this.state = { activeContentId: '' }
     }
 
-    selectActiveContent() {
-
-    }
-
     render() {
         return (
             <div className="admin-page">

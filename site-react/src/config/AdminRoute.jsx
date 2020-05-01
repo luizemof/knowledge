@@ -3,13 +3,8 @@ import { Route, Redirect } from 'react-router'
 import { connect } from 'react-redux'
 
 function AdminRoute(props) {
-    const isAdmin = false
-    console.log(props)
-    return (
-        <div>
-            {isAdmin ? <Route {...props} /> : <Redirect to="/" />}
-        </div>
-    )
+    const { user } = props
+    return (user.admin ? <Route {...props} /> : <Redirect to="/" />)
 }
 
 const mapStateToProps = state => {
