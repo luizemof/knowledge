@@ -20,14 +20,13 @@ export default class TreeView extends Component {
 
     renderTreeItems(items) {
         return items.map(item => {
-            const { children } = item
             const expanded = this.state.expandedOrCollapsed ? this.state.expandedOrCollapsed[item.id] : false
-            let childrenComponents
-            if (children && expanded) {
-                childrenComponents = this.renderTreeItems(children)
+            const childrenComponents = this.renderTreeItems(item.children)
+            const hasChildren = childrenComponents.length > 0
+            if (this.props.filter && !item.name.includes(this.props.filter) && !hasChildren) {
+                return null
             }
 
-            const hasChildren = children.length > 0
             return (
                 <li className="tree-node" key={item.id}>
                     <div className={`tree-content`} onClick={() => this.onNodeSelected(item)}>
@@ -37,7 +36,7 @@ export default class TreeView extends Component {
                     {expanded ? this.renderChildren(hasChildren, childrenComponents) : null}
                 </li>
             )
-        })
+        }).filter(child => child)
     }
 
     renderTreeIcon(hasChildren, expanded) {

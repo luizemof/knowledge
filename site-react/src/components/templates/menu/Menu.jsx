@@ -4,15 +4,16 @@ import { withRouter } from 'react-router-dom'
 
 import TreeView from '../TreeView/TreeView'
 import { categoryUrl } from '../../../global'
+import { handleInputChange } from '../../utils'
 
 import './Menu.css'
 
 class Menu extends Component {
     constructor(props) {
         super(props)
-        this.state = { tree: [] }
+        this.state = { tree: [], filter: '' }
     }
-    
+
     componentDidMount() {
         axios
             .get(`${categoryUrl}/tree`)
@@ -24,9 +25,14 @@ class Menu extends Component {
             <div className="menu">
                 <div className="menu-search">
                     <i className="fa fa-search fa-lg"></i>
-                    <input type="text" placeholder="Digite para filtrar..." />
+                    <input
+                        id="filter"
+                        type="text"
+                        placeholder="Digite para filtrar..."
+                        onChange={e => handleInputChange(e, { ...this.state }, state => this.setState(state))}
+                    />
                 </div>
-                <TreeView data={this.state.tree} onNodeSelected={node => this.handleNodeSelected(node)} />
+                <TreeView data={this.state.tree} filter={this.state.filter} onNodeSelected={node => this.handleNodeSelected(node)} />
             </div>
         )
     }
