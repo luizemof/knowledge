@@ -21,19 +21,14 @@
 
 <script>
 import Gravatar from "vue-gravatar";
+import { mapState } from 'vuex';
 
 export default {
   name: "UserDropDown",
   components: { Gravatar },
-  data: function() {
-    return {
-      user: {
-        name: "Luiz",
-        email: "email@cod3r.com",
-        admin: true
-      }
-    };
-  },
+  computed:mapState({
+    user: state => state.user
+  }),
   methods: {
     logout() {
       this.$store.commit('setUser', null)

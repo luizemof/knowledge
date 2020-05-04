@@ -1,11 +1,8 @@
 <template>
   <div class="article-category">
     <PageTitle icon="fa fa-folder-o" :title="category.name" subTitle="Categoria" />
-    <ArticleItem
-      v-for="article in articles"
-      :key="article.id"
-      :article="article"
-    />
+    <ArticleItem v-for="article in articles" :key="article.id" :article="article" />
+    <b-button v-if="loadMore" variant="outline-danger" @click="handleLoadMore">Carregar mais</b-button>
   </div>
 </template>
 
@@ -19,6 +16,8 @@ export default {
   components: { PageTitle, ArticleItem },
   data() {
     return {
+      loadMore: false,
+      page: 1,
       category: {},
       articles: []
     };
@@ -30,9 +29,11 @@ export default {
     },
     loadArticlesByCategory(categoryId) {
       axios
-        .get(`${categoriesUrl}/${categoryId}/articles`)
+        .get(`${categoriesUrl}/${categoryId}/articles?page=${this.page}`)
         .then(res => {
-          this.articles = res.data;
+          this.articles = this.articles.concat(res.data);
+          this.loadMore = res.data.length > 0;
+          this.page += 1;
         })
         .catch(showError);
     },
@@ -43,10 +44,15 @@ export default {
           this.category = res.data;
         })
         .catch(showError);
+    },
+    handleLoadMore() {
+      this.loadArticlesByCategory(this.category.id);
     }
   },
   watch: {
     $route(to) {
+      this.page = 1;
+      this.articles = [];
       this.load(to.params.id);
     }
   },
@@ -57,4 +63,12 @@ export default {
 </script>
 
 <style>
+.article-category {
+  display: flex;
+  flex-direction: column;
+}
+
+.article-category > button {
+  align-self: center;
+}
 </style>
