@@ -5,36 +5,42 @@ import PageTitle from '../templates/pageTitle/PageTitle'
 import { categoryUrl } from '../../global'
 import ArticlesItem from './ArticlesItem'
 
+import './CategoryArticles.css'
+
+const initialState = {
+    isLoading: true,
+    page: 1,
+    categoryId: null,
+    loadMore: true,
+    articles: []
+}
+
 export default function CategoryArticles(props) {
     const { item } = props.location.state
-    const [loading, setLoading] = useState({ isLoading: true, articles: [] })
+    const [state, setState] = useState({ ...initialState, categoryId: item.id })
     useEffect(() => {
-        if (loading.isLoading || item.id !== loading.id) {
-            loadArticlesByCategory(item.id)
+        if (state.isLoading) {
+            axios.get(`${categoryUrl}/${item.id}/articles?page=${state.page}`)
                 .then(res => {
-                    setLoading({
-                        isLoading: false,
-                        id: item.id,
-                        articles: res.data
-                    })
+                    state.categoryId = item.id
+                    state.isLoading = false
+                    state.articles = state.articles.concat(res.data)
+                    state.loadMore = res.data.length > 0
+                    state.page += 1
+                    setState({ ...state })
                 })
                 .catch(err => console.log(err))
+        } else if (item.id !== state.categoryId) {
+            setState({ ...initialState, categoryId: item.id })
         }
-    })
+    }, [state, item.id])
     return (
-        <div>
+        <div className="category-articles">
             <PageTitle icon="fa fa-folder-o" title={item.name} subTitle="Categoria" />
-            {renderArticleItems(loading.articles)}
+            {renderArticleItems(state.articles)}
+            {state.loadMore ? <button className="btn btn-outline-danger" onClick={e => setState({ ...state, isLoading: true })}>Carregar mais</button> : null}
         </div>
     )
 }
 
-const renderArticleItems = (articles) => articles.map(article => {
-    return (
-        <ArticlesItem key={article.id} item={article} />
-    )
-})
-
-function loadArticlesByCategory(id) {
-    return axios.get(`${categoryUrl}/${id}/articles`)
-}
+const renderArticleItems = (articles) => articles.map(article => (<ArticlesItem key={article.id} item={article} />))

@@ -1,0 +1,8 @@
+.category-articles {
+    display: flex;
+    flex-direction: column;
+}
+
+.category-articles > button {
+    align-self: center;
+}
