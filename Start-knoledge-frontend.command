@@ -1,2 +1,3 @@
-cd Documents/source/Udemy/vue/Projects/knowledge-frontend/site
+#! /bin/bash
+cd ~/Documents/source/luizinhovao/knowledge/site-vue
 npm run serve
